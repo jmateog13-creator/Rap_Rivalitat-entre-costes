@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rivalitat Entre Costes</title>
+    <!-- Google Fonts for a graffiti/urban style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background-color: #333;
+            --container-color: rgba(10, 10, 10, 0.85);
+            --text-color: #f0f0f0;
+            --primary-spray: #ff3f3f; /* Red */
+            --secondary-spray: #00a8ff; /* Blue */
+            --border-color: #555;
+            --success-color: #50ff50; /* Bright Green */
+            --error-color: #ff3f3f; /* Red */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: var(--background-color);
+            background-image: url('https://www.transparenttextures.com/patterns/brick-wall.png');
+            overflow-x: hidden;
+        }
+
+        .quiz-container {
+            background-color: var(--container-color);
+            border: 4px solid #111;
+            border-radius: 10px;
+            padding: 2rem 3rem;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+        
+        h1, h2 {
+            font-family: 'Luckiest Guy', cursive;
+            color: var(--text-color);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-shadow: -3px 3px 0px #000, 0 0 10px var(--primary-spray), 0 0 20px var(--primary-spray);
+        }
+        
+        h2 {
+           font-size: 2.5rem;
+        }
+
+        .question-block {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px dashed var(--border-color);
+        }
+
+        .question-block:last-of-type {
+            border-bottom: none;
+        }
+
+        p.question-title {
+            font-family: 'Luckiest Guy', cursive;
+            font-weight: 400;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            color: var(--secondary-spray);
+            text-shadow: -2px 2px 0px #000;
+        }
+
+        .theory {
+            background-color: rgba(0,0,0,0.3);
+            border-left: 5px solid var(--primary-spray);
+            padding: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            border-radius: 5px;
+        }
+
+        .options-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .vf-group {
+            background: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .vf-group p {
+            font-style: italic;
+            margin-bottom: 0.75rem;
+        }
+
+        .vf-group .options {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: color 0.2s;
+            position: relative;
+        }
+        
+        label:hover {
+            color: var(--primary-spray);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #222;
+            border: 2px solid var(--border-color);
+            color: var(--text-color);
+            font-family: 'Roboto', sans-serif;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-spray);
+            box-shadow: 0 0 10px var(--primary-spray);
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            min-width: 20px;
+            min-height: 20px;
+            accent-color: var(--secondary-spray);
+            background-color: #333;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-spray);
+            appearance: none;
+            cursor: pointer;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="checkbox"] {
+            border-radius: 4px;
+        }
+        
+        input[type="radio"]:checked, input[type="checkbox"]:checked {
+             background-color: var(--secondary-spray);
+             box-shadow: 0 0 10px var(--secondary-spray);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--primary-spray);
+            color: #fff;
+            border: 2px solid #000;
+            font-family: 'Luckiest Guy', cursive;
+            text-transform: uppercase;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border-radius: 8px;
+            text-shadow: -2px 2px 0px #000;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-spray);
+            text-shadow: -2px 2px 0px #000, 0 0 15px var(--secondary-spray);
+        }
+
+        #retry-btn {
+            background: transparent;
+            border: 2px solid var(--secondary-spray);
+            color: var(--secondary-spray);
+        }
+
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+        }
+        #quiz-screen {
+            display: none;
+        }
+        
+        /* --- Feedback Styles --- */
+        .feedback-icon::after {
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-left: 10px;
+        }
+        .correct-choice::after {
+            content: '✓';
+            color: var(--success-color);
+            text-shadow: 0 0 5px var(--success-color);
+        }
+        .incorrect-choice::after {
+            content: '✗';
+            color: var(--error-color);
+            text-shadow: 0 0 5px var(--error-color);
+        }
+       
+        input.correct-input {
+            border-color: var(--success-color);
+            box-shadow: 0 0 5px var(--success-color);
+        }
+        input.incorrect-input {
+            border-color: var(--error-color);
+            box-shadow: 0 0 5px var(--error-color);
+        }
+
+        #final-results-container {
+            text-align: center;
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        #score-display {
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 4rem;
+            color: var(--success-color);
+            text-shadow: -3px 3px 0px #000, 0 0 10px var(--success-color);
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <h1>Rivalitat Entre Costes</h1>
+            <p class="question-title">Escriu el teu TAG (nom):</p>
+            <input type="text" id="username" placeholder="El teu nom..." autocomplete="off">
+            <button class="btn" id="start-btn">Començar</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen">
+            <h2 id="quiz-header">Benvingut/da, <span id="display-username"></span>!</h2>
+            
+            <form id="quiz-form">
+                <!-- Question Block 1 -->
+                <div class="question-block">
+                    <div class="theory">Als anys 90, va sorgir una forta rivalitat entre la Costa Est (East Coast) i la Costa Oest (West Coast) dels Estats Units per veure quin estil de Hip-Hop dominava el país.</div>
+                    <p class="question-title">1.1. En quina dècada va tenir lloc principalment aquesta "guerra"?</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q1" value="a"> Els 80</label>
+                        <label><input type="radio" name="q1" value="b"> Els 90</label>
+                        <label><input type="radio" name="q1" value="c"> Els 2000</label>
+                    </div>
+
+                    <p class="question-title">1.2. Veritable o Fals?</p>
+                    <div class="vf-group">
+                        <p>"La rivalitat era entre artistes d'Europa i d'Amèrica."</p>
+                        <div class="options">
+                           <label><input type="radio" name="q2" value="veritable"> Veritable</label>
+                           <label><input type="radio" name="q2" value="fals"> Fals</label>
+                        </div>
+                    </div>
+
+                    <p class="question-title">1.3. Com s'anomenaven les dues costes enfrontades?</p>
+                    <div class="options-group">
+                        <label><input type="radio" name="q3" value="a"> Nord i Sud</label>
+                        <label><input type="radio" name="q3" value="b"> Est i Oest</label>
+                        <label><input type="radio" name="q3" value="c"> Central i Perifèrica</label>
+                    </div>
+
+                    <p class="question-title">1.4. L'objectiu principal de la rivalitat era:</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q4" value="a"> Una col·laboració amistosa</label>
+                        <label><input type="radio" name="q4" value="b"> La dominació cultural del país</label>
+                        <label><input type="radio" name="q4" value="c"> Un concurs de ball</label>
+                    </div>
+
+                    <p class="question-title">1.5. Veritable o Fals?</p>
+                    <div class="vf-group">
+                        <p>"El conflicte es va desenvolupar principalment a Austràlia."</p>
+                        <div class="options">
+                           <label><input type="radio" name="q5" value="veritable"> Veritable</label>
+                           <label><input type="radio" name="q5" value="fals"> Fals</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Block 2 -->
+                <div class="question-block">
+                    <div class="theory">La Costa Est, liderada per The Notorious B.I.G. i el seu segell Bad Boy Records, tenia un estil líric i brut. La Costa Oest, amb 2Pac (Tupac Shakur) i el segell Death Row Records, es caracteritzava pel so G-Funk, més assolellat i gangsta.</div>
+                    
+                    <p class="question-title">2.1. Qui era el principal representant de la Costa Est?</p>
+                    <div class="options-group">
+                        <label><input type="radio" name="q6" value="a"> Dr. Dre</label>
+                        <label><input type="radio" name="q6" value="b"> Tupac Shakur</label>
+                        <label><input type="radio" name="q6" value="c"> The Notorious B.I.G.</label>
+                    </div>
+                    
+                    <p class="question-title">2.2. Quin segell discogràfic pertanyia a la Costa Oest?</p>
+                    <div class="options-group">
+                        <label><input type="radio" name="q7" value="a"> Bad Boy Records</label>
+                        <label><input type="radio" name="q7" value="b"> Death Row Records</label>
+                        <label><input type="radio" name="q7" value="c"> Universal Music</label>
+                    </div>
+
+                    <p class="question-title">2.3. L'estil musical G-Funk s'associa a...</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q8" value="a"> La Costa Est (Nova York)</label>
+                        <label><input type="radio" name="q8" value="b"> La Costa Oest (Los Angeles)</label>
+                    </div>
+
+                    <p class="question-title">2.4. Qui era la figura principal de la Costa Oest?</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q9" value="a"> The Notorious B.I.G.</label>
+                        <label><input type="radio" name="q9" value="b"> Jay-Z</label>
+                        <label><input type="radio" name="q9" value="c"> 2Pac (Tupac Shakur)</label>
+                    </div>
+
+                    <p class="question-title">2.5. Veritable o Fals?</p>
+                    <div class="vf-group">
+                        <p>"L'estil de la Costa Est es descrivia com a suau i melòdic."</p>
+                        <div class="options">
+                           <label><input type="radio" name="q10" value="veritable"> Veritable</label>
+                           <label><input type="radio" name="q10" value="fals"> Fals</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Block 3 -->
+                <div class="question-block">
+                     <div class="theory">Musicalment, la Costa Est feia servir "samples" de jazz/soul i ritmes complexos (boom-bap), centrant-se en la lírica. La Costa Oest preferia el G-Funk, amb sintetitzadors aguts, línies de baix inspirades en el funk i un ambient més relaxat i de festa.</div>
+                    <p class="question-title">3.1. Quin estil es basa en l'ús de sintetitzadors i baixos funk?</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q11" value="a"> Boom-bap</label>
+                        <label><input type="radio" name="q11" value="b"> G-Funk</label>
+                        <label><input type="radio" name="q11" value="c"> Jazz Rap</label>
+                    </div>
+
+                     <p class="question-title">3.2. Veritable o Fals?</p>
+                    <div class="vf-group">
+                        <p>"La Costa Est es caracteritzava per un so relaxat i de festa."</p>
+                        <div class="options">
+                           <label><input type="radio" name="q12" value="veritable"> Veritable</label>
+                           <label><input type="radio" name="q12" value="fals"> Fals</label>
+                        </div>
+                    </div>
+
+                     <p class="question-title">3.3. Com s'anomena el patró rítmic complex típic de la Costa Est?</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q13" value="a"> G-Funk</label>
+                        <label><input type="radio" name="q13" value="b"> Trap</label>
+                        <label><input type="radio" name="q13" value="c"> Boom-bap</label>
+                    </div>
+
+                    <p class="question-title">3.4. L'ús de 'samples' de jazz i soul era més comú a...</p>
+                    <div class="options-group">
+                        <label><input type="radio" name="q14" value="a"> La Costa Est</label>
+                        <label><input type="radio" name="q14" value="b"> La Costa Oest</label>
+                    </div>
+
+                    <p class="question-title">3.5. Veritable o Fals?</p>
+                    <div class="vf-group">
+                        <p>"El G-Funk és un estil centrat exclusivament en la complexitat de les lletres."</p>
+                        <div class="options">
+                           <label><input type="radio" name="q15" value="veritable"> Veritable</label>
+                           <label><input type="radio" name="q15" value="fals"> Fals</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Block 4 -->
+                <div class="question-block">
+                     <div class="theory">La competició va passar de la música a la vida real, amb acusacions, confrontacions i "diss tracks" (cançons d'atac). Aquesta espiral de violència va culminar amb els assassinats de Tupac Shakur (1996) i The Notorious B.I.G. (1997).</div>
+                    <p class="question-title">4.1. Què és un "diss track"?</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q16" value="a"> Una cançó de pau</label>
+                        <label><input type="radio" name="q16" value="b"> Una cançó d'atac a un altre artista</label>
+                        <label><input type="radio" name="q16" value="c"> Un remix d'un èxit</label>
+                    </div>
+
+                     <p class="question-title">4.2. Veritable o Fals?</p>
+                    <div class="vf-group">
+                        <p>"La rivalitat es va mantenir sempre en el terreny musical i mai no va ser violenta."</p>
+                        <div class="options">
+                           <label><input type="radio" name="q17" value="veritable"> Veritable</label>
+                           <label><input type="radio" name="q17" value="fals"> Fals</label>
+                        </div>
+                    </div>
+
+                     <p class="question-title">4.3. Quin dels dos artistes va ser assassinat primer?</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q18" value="a"> The Notorious B.I.G.</label>
+                        <label><input type="radio" name="q18" value="b"> Tupac Shakur</label>
+                    </div>
+
+                    <p class="question-title">4.4. En quin any va ser assassinat The Notorious B.I.G.?</p>
+                    <div class="options-group">
+                        <label><input type="radio" name="q19" value="a"> 1996</label>
+                        <label><input type="radio" name="q19" value="b"> 1997</label>
+                        <label><input type="radio" name="q19" value="c"> 1998</label>
+                    </div>
+
+                    <p class="question-title">4.5. Com va culminar tràgicament la rivalitat?</p>
+                    <div class="options-group">
+                        <label><input type="radio" name="q20" value="a"> Amb un concert de reconciliació</label>
+                        <label><input type="radio" name="q20" value="b"> Amb la separació dels segells discogràfics</label>
+                        <label><input type="radio" name="q20" value="c"> Amb l'assassinat dels dos artistes principals</label>
+                    </div>
+                </div>
+                
+                <!-- Question Block 5 -->
+                <div class="question-block">
+                    <div class="theory">Aquesta era, malgrat ser tràgica, va produir algunes de les obres i artistes més icònics i influents de la història del Hip-Hop. Va demostrar que les "barres" (les lletres de les cançons) podien tenir un poder real i perillós.</div>
+                    <p class="question-title">5.1. Veritable o Fals?</p>
+                    <div class="vf-group">
+                        <p>"La rivalitat entre costes no va tenir cap impacte positiu a la música Hip-Hop."</p>
+                        <div class="options">
+                           <label><input type="radio" name="q21" value="veritable"> Veritable</label>
+                           <label><input type="radio" name="q21" value="fals"> Fals</label>
+                        </div>
+                    </div>
+
+                    <p class="question-title">5.2. A més de la violència, què va produir aquesta era?</p>
+                    <div class="options-group">
+                        <label><input type="radio" name="q22" value="a"> La decadència del Hip-Hop</label>
+                        <label><input type="radio" name="q22" value="b"> Obres i artistes icònics</label>
+                        <label><input type="radio" name="q22" value="c"> La fusió amb la música country</label>
+                    </div>
+
+                    <p class="question-title">5.3. El terme 'barres' al Hip-Hop es refereix a:</p>
+                     <div class="options-group">
+                        <label><input type="radio" name="q23" value="a"> Les presons</label>
+                        <label><input type="radio" name="q23" value="b"> Les lletres de les cançons</label>
+                        <label><input type="radio" name="q23" value="c"> Els lingots d'or</label>
+                    </div>
+
+                    <p class="question-title">5.4. Veritable o Fals?</p>
+                    <div class="vf-group">
+                        <p>"L'era de la rivalitat és considerada poc influent en la història del Hip-Hop."</p>
+                        <div class="options">
+                           <label><input type="radio" name="q24" value="veritable"> Veritable</label>
+                           <label><input type="radio" name="q24" value="fals"> Fals</label>
+                        </div>
+                    </div>
+
+                    <p class="question-title">5.5. Què va demostrar aquesta 'guerra' sobre el poder de les paraules?</p>
+                    <div class="options-group">
+                        <label><input type="radio" name="q25" value="a"> Que no tenen cap efecte real</label>
+                        <label><input type="radio" name="q25" value="b"> Que poden ser inofensives</label>
+                        <label><input type="radio" name="q25" value="c"> Que poden ser perillosament reals</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn" id="submit-btn">Finalitzar</button>
+
+                <div id="final-results-container">
+                    <h2 id="result-header">Resultats Finals</h2>
+                    <p id="score-display">100 / 100</p>
+                    <button class="btn" id="retry-btn" type="button">Tornar a començar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const startBtn = document.getElementById('start-btn');
+        const retryBtn = document.getElementById('retry-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const quizForm = document.getElementById('quiz-form');
+        const usernameInput = document.getElementById('username');
+        const displayUsername = document.getElementById('display-username');
+        const resultHeader = document.getElementById('result-header');
+        const scoreDisplay = document.getElementById('score-display');
+        const resultsContainer = document.getElementById('final-results-container');
+        
+        let currentUsername = '';
+
+        // Event Listeners
+        startBtn.addEventListener('click', startQuiz);
+        quizForm.addEventListener('submit', finishQuiz);
+        retryBtn.addEventListener('click', retryQuiz);
+
+        // Functions
+        function startQuiz() {
+            currentUsername = usernameInput.value.trim();
+            if (currentUsername === "") {
+                alert("Si us plau, escriu el teu nom per començar.");
+                return;
+            }
+            displayUsername.textContent = currentUsername;
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+        }
+
+        function finishQuiz(event) {
+            event.preventDefault();
+            let score = 0;
+            const totalPoints = 100;
+            const questionsCount = 25;
+            const pointsPerQuestion = totalPoints / questionsCount;
+            
+            // --- Question Block 1 ---
+            const q1Answer = document.querySelector('input[name="q1"]:checked');
+            if (q1Answer && q1Answer.value === 'b') { score += pointsPerQuestion; q1Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q1Answer) { q1Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+            
+            const q2Answer = document.querySelector('input[name="q2"]:checked');
+            if (q2Answer && q2Answer.value === 'fals') { score += pointsPerQuestion; q2Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q2Answer) { q2Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q3Answer = document.querySelector('input[name="q3"]:checked');
+            if (q3Answer && q3Answer.value === 'b') { score += pointsPerQuestion; q3Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q3Answer) { q3Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q4Answer = document.querySelector('input[name="q4"]:checked');
+            if (q4Answer && q4Answer.value === 'b') { score += pointsPerQuestion; q4Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q4Answer) { q4Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+            
+            const q5Answer = document.querySelector('input[name="q5"]:checked');
+            if (q5Answer && q5Answer.value === 'fals') { score += pointsPerQuestion; q5Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q5Answer) { q5Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+            
+            // --- Question Block 2 ---
+            const q6Answer = document.querySelector('input[name="q6"]:checked');
+            if (q6Answer && q6Answer.value === 'c') { score += pointsPerQuestion; q6Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q6Answer) { q6Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q7Answer = document.querySelector('input[name="q7"]:checked');
+            if(q7Answer && q7Answer.value === 'b') { score += pointsPerQuestion; q7Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q7Answer) { q7Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+            
+            const q8Answer = document.querySelector('input[name="q8"]:checked');
+            if(q8Answer && q8Answer.value === 'b') { score += pointsPerQuestion; q8Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q8Answer) { q8Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+           
+            const q9Answer = document.querySelector('input[name="q9"]:checked');
+            if (q9Answer && q9Answer.value === 'c') { score += pointsPerQuestion; q9Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q9Answer) { q9Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q10Answer = document.querySelector('input[name="q10"]:checked');
+            if (q10Answer && q10Answer.value === 'fals') { score += pointsPerQuestion; q10Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q10Answer) { q10Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            // --- Question Block 3 ---
+            const q11Answer = document.querySelector('input[name="q11"]:checked');
+            if(q11Answer && q11Answer.value === 'b') { score += pointsPerQuestion; q11Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q11Answer) { q11Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q12Answer = document.querySelector('input[name="q12"]:checked');
+            if(q12Answer && q12Answer.value === 'fals') { score += pointsPerQuestion; q12Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q12Answer) { q12Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+            
+            const q13Answer = document.querySelector('input[name="q13"]:checked');
+            if(q13Answer && q13Answer.value === 'c') { score += pointsPerQuestion; q13Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q13Answer) { q13Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q14Answer = document.querySelector('input[name="q14"]:checked');
+            if (q14Answer && q14Answer.value === 'a') { score += pointsPerQuestion; q14Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q14Answer) { q14Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q15Answer = document.querySelector('input[name="q15"]:checked');
+            if (q15Answer && q15Answer.value === 'fals') { score += pointsPerQuestion; q15Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q15Answer) { q15Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+            
+            // --- Question Block 4 ---
+            const q16Answer = document.querySelector('input[name="q16"]:checked');
+            if(q16Answer && q16Answer.value === 'b') { score += pointsPerQuestion; q16Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q16Answer) { q16Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q17Answer = document.querySelector('input[name="q17"]:checked');
+            if(q17Answer && q17Answer.value === 'fals') { score += pointsPerQuestion; q17Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q17Answer) { q17Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q18Answer = document.querySelector('input[name="q18"]:checked');
+            if(q18Answer && q18Answer.value === 'b') { score += pointsPerQuestion; q18Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q18Answer) { q18Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q19Answer = document.querySelector('input[name="q19"]:checked');
+            if (q19Answer && q19Answer.value === 'b') { score += pointsPerQuestion; q19Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q19Answer) { q19Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q20Answer = document.querySelector('input[name="q20"]:checked');
+            if (q20Answer && q20Answer.value === 'c') { score += pointsPerQuestion; q20Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q20Answer) { q20Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+            
+            // --- Question Block 5 ---
+            const q21Answer = document.querySelector('input[name="q21"]:checked');
+            if (q21Answer && q21Answer.value === 'fals') { score += pointsPerQuestion; q21Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q21Answer) { q21Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q22Answer = document.querySelector('input[name="q22"]:checked');
+            if (q22Answer && q22Answer.value === 'b') { score += pointsPerQuestion; q22Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q22Answer) { q22Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q23Answer = document.querySelector('input[name="q23"]:checked');
+            if (q23Answer && q23Answer.value === 'b') { score += pointsPerQuestion; q23Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q23Answer) { q23Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q24Answer = document.querySelector('input[name="q24"]:checked');
+            if (q24Answer && q24Answer.value === 'fals') { score += pointsPerQuestion; q24Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q24Answer) { q24Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+            const q25Answer = document.querySelector('input[name="q25"]:checked');
+            if (q25Answer && q25Answer.value === 'c') { score += pointsPerQuestion; q25Answer.parentElement.classList.add('correct-choice', 'feedback-icon'); }
+            else if(q25Answer) { q25Answer.parentElement.classList.add('incorrect-choice', 'feedback-icon'); }
+
+
+            // --- Finalize ---
+            showResults(Math.round(score));
+        }
+
+        function showResults(score) {
+            // Disable all form elements
+            quizForm.querySelectorAll('input, select').forEach(el => el.disabled = true);
+            
+            // Show score and retry button
+            submitBtn.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
+            resultHeader.textContent = `Resultats de ${currentUsername}`;
+            scoreDisplay.textContent = `${score} / 100`;
+
+            if (score < 50) {
+                scoreDisplay.style.color = 'var(--error-color)';
+                scoreDisplay.style.textShadow = '-3px 3px 0px #000, 0 0 10px var(--error-color)';
+            } else {
+                 scoreDisplay.style.color = 'var(--success-color)';
+                 scoreDisplay.style.textShadow = '-3px 3px 0px #000, 0 0 10px var(--success-color)';
+            }
+        }
+
+        function retryQuiz() {
+            // Reset form values
+            quizForm.reset();
+
+            // Remove all feedback classes
+            const feedbackElements = quizForm.querySelectorAll('.correct-choice, .incorrect-choice, .correct-input, .incorrect-input, .feedback-icon');
+            feedbackElements.forEach(el => {
+                el.classList.remove('correct-choice', 'incorrect-choice', 'correct-input', 'incorrect-input', 'feedback-icon');
+            });
+            
+            // Enable form elements
+            quizForm.querySelectorAll('input, select').forEach(el => el.disabled = false);
+
+            // Reset buttons and score display
+            submitBtn.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            // Scroll to the top
+            quizScreen.scrollTo(0, 0);
+        }
+
+    </script>
+</body>
+</html>
+
